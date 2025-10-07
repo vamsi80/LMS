@@ -19,7 +19,6 @@ export const signIn = async (email: string, password: string) => {
         body: {
             email,
             password,
-            callbackURL: "/dashboard",
         }
     });
     console.log("Signing up user:", { email, password });
@@ -39,6 +38,17 @@ export const forgetPassword = async (email: string) => {
         body: {
             email,
             redirectTo: "/reset-password",
+        }
+    });
+    return result;
+}
+
+export const ResetPassword = async ({ newPassword, token }: { newPassword: string; token: string }) => {
+    // Function to handle password reset
+    const result = await auth.api.resetPassword({
+        body: {
+            newPassword,
+            token,
         }
     });
     return result;

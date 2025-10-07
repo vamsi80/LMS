@@ -41,9 +41,12 @@ export function LoginForm({
     try {
       if (signIn) {
         const result = await signIn(email, password);
-        if (!result.user) {
-          setError("Invalid email or password");
-        }
+        if (result?.user) {
+        // ✅ Redirect to dashboard after successful sign-in
+        router.push("/dashboard");
+      } else {
+        setError("Invalid email or password");
+      }
       } else {
         setError("Account does not exist. Please sign up.");
       }
