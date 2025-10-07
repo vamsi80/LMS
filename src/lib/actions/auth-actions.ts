@@ -10,7 +10,7 @@ export const signUp = async (email: string, password: string, name: string) => {
             email, password, name, callbackURL: "/dashboard"
         }
     });
-    console.log("Signing up user:", { email, password, name });
+    // console.log("Signing up user:", { email, password, name });
     return result;
 };
 
@@ -21,7 +21,7 @@ export const signIn = async (email: string, password: string) => {
             password,
         }
     });
-    console.log("Signing up user:", { email, password });
+    // console.log("Signing up user:", { email, password });
     return result;
 };
 

@@ -17,7 +17,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { forgetPassword, signIn } from "@/lib/actions/auth-actions";
-import { auth as authClient } from "@/lib/auth-clint";
 
 export function LoginForm({
   className,

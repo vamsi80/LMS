@@ -24,24 +24,9 @@ model User {
   updatedAt     DateTime  @default(now()) @updatedAt
   sessions      Session[]
   accounts      Account[]
-  resetTokens   ResetToken[]
 
   @@unique([email])
   @@map("user")
-}
-
-model ResetToken {
-  id         String   @id @default(uuid())
-  userId     String
-  tokenHash  String   // store SHA256(token) hex
-  expiresAt  DateTime
-  used       Boolean  @default(false)
-  createdAt  DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([tokenHash])
-  @@index([userId])
 }
 
 model Session {
