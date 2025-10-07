@@ -33,18 +33,13 @@ export const signOut = async () => {
     return result;
 };
 
-export const forgotPassword = async ( value:any, ) => {
-    console.log("Requesting password reset for:", value.email);
-    try {
-        const result = await auth.api.requestPasswordReset({
-            body: {
-                email: value.email,
-            },
-        });
-        console.log("Password reset requested:", result);
-        return result;
-    } catch (error) {
-        console.error("Error sending password reset email:", error);
-        throw error;
-    }
-};
+export const forgetPassword = async (email: string) => {
+    // Function to handle password reset
+    const result = await auth.api.forgetPassword({
+        body: {
+            email,
+            redirectTo: "/reset-password",
+        }
+    });
+    return result;
+}

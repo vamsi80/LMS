@@ -16,7 +16,7 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { forgotPassword, signIn } from "@/lib/actions/auth-actions";
+import { forgetPassword, signIn } from "@/lib/actions/auth-actions";
 import { auth as authClient } from "@/lib/auth-clint";
 
 export function LoginForm({
@@ -60,12 +60,11 @@ export function LoginForm({
     setForgotMsg(null);
     console.log("Forgot email:", forgotEmail);
     try {
-      const result = await authClient.requestPasswordReset({
-        email: forgotEmail,
-        redirectTo: "/reset-password",
-      });
-      console.log("Forgot password result:", result);
+      const res = await forgetPassword(forgotEmail); // ✅ Call server function here
+      setForgotMsg("Reset link sent to your email!");
+      console.log("Server response:", res);
     }
+
     catch (err) {
       setForgotMsg("Error sending password reset email. Please try again.");
     } finally {
