@@ -23,34 +23,24 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { signOut } from "@/lib/actions/auth-actions";
 import { authClient } from "@/lib/auth-clint";
-import { useEffect, useState } from "react";
+import { useSignout } from "@/hooks/use-signout";
 
 export default function UserMenu() {
+  const handleSignOut = useSignout();
 
-  const router = useRouter();
-  const [user, setUser] = useState<{ name: string; email: string } | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  const { data: session } = authClient.useSession();
-  useEffect(() => {
-    if (session?.user) {
-      setUser({
-        name: session.user.name || "User",
-        email: session.user.email || "No email",
-      });
-    }
-  }, [session]);
-
-  const handleLogout = async () => {
-    try {
-      await signOut();
-      router.refresh();
-    } catch (error) {
-      console.error("Sign out failed:", error);
-    }
-  };
+  const { data: session, isPending } = authClient.useSession();
+  if (isPending) {
+    return null;
+  }
+  // useEffect(() => {
+  //   if (session?.user) {
+  //     setUser({
+  //       name: session.user.name || "User",
+  //       email: session.user.email || "No email",
+  //     });
+  //   }
+  // }, [session]);
 
   return (
     <DropdownMenu>
@@ -59,7 +49,7 @@ export default function UserMenu() {
           <Avatar>
             <AvatarImage src="./avatar.jpg" alt="Profile image" />
             <AvatarFallback>
-              {user?.name ? user.name[0].toUpperCase() : "U"}
+              {session?.user?.name ? session.user.name[0].toUpperCase() : "U"}
             </AvatarFallback>
           </Avatar>
         </Button>
@@ -67,10 +57,10 @@ export default function UserMenu() {
       <DropdownMenuContent className="max-w-64" align="end">
         <DropdownMenuLabel className="flex min-w-0 flex-col">
           <span className="text-foreground truncate text-sm font-medium">
-            {user?.name || "Loading..."}
+            {session?.user?.name || "Loading..."}
           </span>
           <span className="text-muted-foreground truncate text-xs font-normal">
-            {user?.email || ""}
+            {session?.user?.email || ""}
           </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -100,7 +90,7 @@ export default function UserMenu() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+        <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
           <LogOutIcon size={16} className="opacity-60" aria-hidden="true" />
           <span>Logout</span>
         </DropdownMenuItem>

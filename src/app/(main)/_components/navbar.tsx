@@ -1,6 +1,5 @@
 "use client"
 
-import { useId } from "react"
 import {
   FileTextIcon,
   HomeIcon,
@@ -8,7 +7,6 @@ import {
   UsersIcon,
 } from "lucide-react"
 
-import Logo from "@/components/logo"
 import ThemeToggle from "@/components/ui/theme-toggle"
 import UserMenu from "@/app/(main)/_components/user-menu"
 import { Button } from "@/components/ui/button"
@@ -29,7 +27,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { authClient } from "@/lib/auth-clint"
-
+import Link from "next/link"
+import Image from "next/image"
 const navigationLinks = [
   { href: "dashboard", label: "Dashboard", icon: HomeIcon, active: true },
   { href: "projects", label: "Projects", icon: LayersIcon },
@@ -108,9 +107,9 @@ export default function Navbar() {
           </Popover>
           <div className="flex items-center gap-6">
             {/* Logo */}
-            <a href="#" className="text-primary hover:text-primary/90">
-              <Logo />
-            </a>
+            <Link href="/" className="block relative h-10 md:h-16 lg:h-16 w-full max-w-[220px]">
+              <Image src="/logo.png" alt="logo" fill className="object-contain" />
+            </Link>
             {/* Desktop navigation - icon only */}
             <NavigationMenu className="hidden md:flex">
               <NavigationMenuList className="gap-2">
@@ -140,7 +139,7 @@ export default function Navbar() {
           {/* Theme toggle */}
           <ThemeToggle />
           {isPending ? null : session ? (
-            <UserMenu/>
+            <UserMenu />
           ) : (
             <div className="flex items-center gap-2">
               <Button asChild variant="ghost" size="sm" className="text-sm">
