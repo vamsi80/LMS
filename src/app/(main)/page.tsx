@@ -1,7 +1,6 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import ThemeToggle from "@/components/ui/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 

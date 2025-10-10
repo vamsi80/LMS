@@ -31,17 +31,17 @@ export default function UserMenu() {
 
   const router = useRouter();
   const [user, setUser] = useState<{ name: string; email: string } | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const { data: session } = authClient.useSession();
-
-  // useEffect(() => {
-  //   if (session?.user) {
-  //     setUser({
-  //       name: session.user.name || "User",
-  //       email: session.user.email || "No email",
-  //     });
-  //   }
-  // }, [session]);
+  useEffect(() => {
+    if (session?.user) {
+      setUser({
+        name: session.user.name || "User",
+        email: session.user.email || "No email",
+      });
+    }
+  }, [session]);
 
   const handleLogout = async () => {
     try {
@@ -59,7 +59,7 @@ export default function UserMenu() {
           <Avatar>
             <AvatarImage src="./avatar.jpg" alt="Profile image" />
             <AvatarFallback>
-              {session?.user?.name ? session.user.name[0].toUpperCase() : "U"}
+              {user?.name ? user.name[0].toUpperCase() : "U"}
             </AvatarFallback>
           </Avatar>
         </Button>
@@ -67,10 +67,10 @@ export default function UserMenu() {
       <DropdownMenuContent className="max-w-64" align="end">
         <DropdownMenuLabel className="flex min-w-0 flex-col">
           <span className="text-foreground truncate text-sm font-medium">
-            {session?.user?.name || "Loading..."}
+            {user?.name || "Loading..."}
           </span>
           <span className="text-muted-foreground truncate text-xs font-normal">
-            {session?.user?.email || ""}
+            {user?.email || ""}
           </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
