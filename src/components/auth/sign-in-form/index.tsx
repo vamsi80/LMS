@@ -42,7 +42,7 @@ export function LoginForm({
         const result = await signIn(email, password);
         if (result?.user) {
         // ✅ Redirect to dashboard after successful sign-in
-        router.push("/dashboard");
+        router.push("/");
       } else {
         setError("Invalid email or password");
       }
