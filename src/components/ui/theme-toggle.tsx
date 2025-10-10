@@ -1,34 +1,49 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { MoonIcon, SunIcon } from "lucide-react"
-
+import { useTheme } from "next-themes"
 import { Toggle } from "@/components/ui/toggle"
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<string>("light")
+  const { theme, setTheme, resolvedTheme } = useTheme()
+  // resolvedTheme is the real theme applied ("light" | "dark")
+  const [mounted, setMounted] = useState(false)
+
+  // avoid hydration mismatch — only render after mount
+  useEffect(() => setMounted(true), [])
+
+  // treat resolvedTheme as source of truth once mounted
+  const active = mounted ? resolvedTheme : theme || "light"
+  const isDark = active === "dark"
+
+  const toggleTheme = () => setTheme(isDark ? "light" : "dark")
 
   return (
-    <div>
+    <div aria-hidden={!mounted ? true : false}>
       <Toggle
         variant="outline"
-        className="group data-[state=on]:hover:bg-muted text-muted-foreground data-[state=on]:text-muted-foreground data-[state=on]:hover:text-foreground size-8 rounded-full border-none shadow-none data-[state=on]:bg-transparent"
-        pressed={theme === "dark"}
-        onPressedChange={() =>
-          setTheme((prev) => (prev === "dark" ? "light" : "dark"))
-        }
-        aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+        pressed={isDark}
+        onPressedChange={toggleTheme}
+        aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
+        className="relative inline-flex items-center justify-center w-9 h-9 rounded-full border-none p-0 focus:outline-none"
       >
-        {/* Note: After dark mode implementation, rely on dark: prefix rather than group-data-[state=on]: */}
-        <MoonIcon
-          size={16}
-          className="shrink-0 scale-0 opacity-0 transition-all group-data-[state=on]:scale-100 group-data-[state=on]:opacity-100"
-          aria-hidden="true"
-        />
+        {/* Sun (light) */}
         <SunIcon
           size={16}
-          className="absolute shrink-0 scale-100 opacity-100 transition-all group-data-[state=on]:scale-0 group-data-[state=on]:opacity-0"
           aria-hidden="true"
+          className={`transition-transform transition-opacity duration-200 ease-out
+            ${isDark ? "opacity-0 scale-75" : "opacity-100 scale-100"}
+            `}
+        />
+
+        {/* Moon (dark) — positioned absolutely so they overlap nicely */}
+        <MoonIcon
+          size={16}
+          aria-hidden="true"
+          className={`absolute transition-transform transition-opacity duration-200 ease-out
+            ${isDark ? "opacity-100 scale-100" : "opacity-0 scale-75"}
+            `}
         />
       </Toggle>
     </div>

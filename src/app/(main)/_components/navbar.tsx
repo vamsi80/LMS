@@ -29,6 +29,8 @@ import {
 import { authClient } from "@/lib/auth-clint"
 import Link from "next/link"
 import Image from "next/image"
+
+
 const navigationLinks = [
   { href: "dashboard", label: "Dashboard", icon: HomeIcon, active: true },
   { href: "projects", label: "Projects", icon: LayersIcon },
@@ -107,8 +109,15 @@ export default function Navbar() {
           </Popover>
           <div className="flex items-center gap-6">
             {/* Logo */}
-            <Link href="/" className="block relative h-10 md:h-16 lg:h-16 w-full max-w-[220px]">
-              <Image src="/logo.png" alt="logo" fill className="object-contain" />
+            <Link href="/" className="block w-full max-w-[220px]">
+              <Image
+                src="/logo.png"
+                alt="logo"
+                width={120}
+                height={40}
+                className="object-contain max-h-16"
+                priority
+              />
             </Link>
             {/* Desktop navigation - icon only */}
             <NavigationMenu className="hidden md:flex">

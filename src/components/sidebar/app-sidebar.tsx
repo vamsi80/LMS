@@ -29,15 +29,9 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import Image from "next/image"
-import logo from "../../assets/logo.png"
 
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Dashboard",
@@ -144,11 +138,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <Link href="/" className="block w-auto relative h-10 md:h-16 lg:h-16">
                 <Image
-                  src={logo}
+                  src="/logo.png"
                   alt="logo"
-                  fill
-                  className="object-contain"
-                  sizes="(max-width: 150px) 150px, 200px"
+                  width={120}
+                  height={40}
+                  className="object-contain max-h-16"
                   priority
                 />
               </Link>
