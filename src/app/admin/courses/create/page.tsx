@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { CourseCategories, CourseLevel, courseSchema, CourseSchemaType, CourseStatus } from "@/lib/zodSchemas";
+import { RichTextEditor } from "@/components/rich-text-editor/editor";
 
 export default function CourseCreationPage() {
 
@@ -122,10 +123,11 @@ export default function CourseCreationPage() {
                                     <FormItem>
                                         <FormLabel>Descreption</FormLabel>
                                         <FormControl>
-                                            <Textarea
+                                            <RichTextEditor/>
+                                            {/* <Textarea
                                                 placeholder="Descreption"
                                                 className="min-h-[20px]"{...field}
-                                            />
+                                            /> */}
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
