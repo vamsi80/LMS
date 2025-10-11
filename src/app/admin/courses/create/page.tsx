@@ -123,7 +123,7 @@ export default function CourseCreationPage() {
                                     <FormItem>
                                         <FormLabel>Descreption</FormLabel>
                                         <FormControl>
-                                            <RichTextEditor/>
+                                            <RichTextEditor field={field}/>
                                             {/* <Textarea
                                                 placeholder="Descreption"
                                                 className="min-h-[20px]"{...field}
