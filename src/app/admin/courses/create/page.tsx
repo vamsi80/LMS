@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { CourseCategories, CourseLevel, courseSchema, CourseSchemaType, CourseStatus } from "@/lib/zodSchemas";
 import { RichTextEditor } from "@/components/rich-text-editor/editor";
+import { Uploader } from "@/components/file-uploader/uploader";
 
 export default function CourseCreationPage() {
 
@@ -124,10 +125,6 @@ export default function CourseCreationPage() {
                                         <FormLabel>Descreption</FormLabel>
                                         <FormControl>
                                             <RichTextEditor field={field}/>
-                                            {/* <Textarea
-                                                placeholder="Descreption"
-                                                className="min-h-[20px]"{...field}
-                                            /> */}
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -140,7 +137,8 @@ export default function CourseCreationPage() {
                                     <FormItem>
                                         <FormLabel>Thumbnail image</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="thumbnail url" {...field} />
+                                            <Uploader/>
+                                            {/* <Input placeholder="thumbnail url" {...field} /> */}
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
