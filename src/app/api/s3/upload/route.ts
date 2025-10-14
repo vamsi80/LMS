@@ -1,6 +1,5 @@
 import { env } from '@/lib/env';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
-import { error } from 'console';
 import { NextResponse } from 'next/server';
 import { z } from 'zod'
 import { v4 as uuidv4 } from 'uuid';

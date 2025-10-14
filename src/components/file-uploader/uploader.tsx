@@ -40,7 +40,7 @@ export function Uploader() {
 
         try {
             //1 get presign URL
-            const presignedResponce = await fetch('/api/firebase/upload', {
+            const presignedResponce = await fetch('/api/s3/upload', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
