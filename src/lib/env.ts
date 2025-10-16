@@ -50,10 +50,10 @@ export const env = createEnv({
 // SMTP_FROM="digital@thewhitetusker.com"
 
 
-// AWS_ACCESS_KEY_ID="tid_cvEqrAKjwNmhgAog_ZWRQbgGydcUcJwgFBIVQaaAyLSlSSetry"
-// AWS_SECRET_ACCESS_KEY="tsec_yBlOeCYJNGFxmSHRHrjfZsLRQ552W_qBzWh4Mh5+Kkmynj8wMQNd5pRb4CF0mfMaBYpi+2"
-// AWS_ENDPOINT_URL_S3="https://t3.storage.dev"
-// AWS_ENDPOINT_URL_IAM="https://iam.storage.dev"
-// AWS_REGION="auto"
+// AWS_ACCESS_KEY_ID=tid_brI_tnwQFoolzhYBllOytgurmFxUTWpVshhOzlggqVfnFXgHYJ
+// AWS_SECRET_ACCESS_KEY=tsec_SaILSeykpLMygkNvRbQvNzWR7PY1sGk3oU7KJyiPHod+yVRBS3egrP25wDyzDKenVmwtCD
+// AWS_ENDPOINT_URL_S3=https://t3.storage.dev
+// AWS_ENDPOINT_URL_IAM=https://iam.storage.dev
+// AWS_REGION=auto
 
 // NEXT_PUBLIC_S3_BUCKET_NAME_IMAGES="lms-vamsi"

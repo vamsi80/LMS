@@ -26,7 +26,7 @@ export function RichTextEditor({field}: {field:any}) {
         },
 
         onUpdate:   ({editor}) => {
-            field.onChange(JSON.stringify(editor.getJSON))
+            field.onChange(JSON.stringify(editor.getJSON()));
         },
         // IMPORTANT: avoid immediate HTML render on the server — prevents hydration mismatch
         immediatelyRender: false,

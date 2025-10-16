@@ -1,6 +1,8 @@
 import { cn } from "@/lib/utils";
-import { CloudUploadIcon, ImageIcon } from "lucide-react";
+import { CloudUploadIcon, ImageIcon, Loader, Loader2, XIcon } from "lucide-react";
 import { Button } from "../ui/button";
+import Image from "next/image";
+
 
 export function RenderEmptyState({ isDragActive }: { isDragActive: boolean }) {
     return (
@@ -22,8 +24,8 @@ export function RenderEmptyState({ isDragActive }: { isDragActive: boolean }) {
     )
 }
 
-export function RenderErrorState(){
-    return(
+export function RenderErrorState() {
+    return (
         <div className="text-center">
             <div className="flex items-center mx-auto justify-center size-12 rounded-full bg-muted mb-4">
                 <ImageIcon className={cn("size-6 text-destructive")} />
@@ -33,6 +35,42 @@ export function RenderErrorState(){
             <Button type="button" className="mt-4">
                 Retry File Selection
             </Button>
+        </div>
+    )
+}
+
+export function RenderUplodedState({ previewUrl, isDeleting, hadleRemoveFiles, }: { previewUrl: string; isDeleting: boolean; hadleRemoveFiles: () => void; }) {
+    return (
+        <div>
+
+            <Image src={previewUrl} alt="preview" fill className="w-full h-full object-cover p-2" />
+
+            <Button
+                variant="destructive"
+                type="button"
+                className={cn("absolute top-2 right-2")}
+                onClick={hadleRemoveFiles}
+                disabled={isDeleting}
+            >
+                {isDeleting ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                    <XIcon className="size-4" />
+                )}
+            </Button>
+        </div>
+
+    )
+}
+
+export function RenderUplodingState({ progress, file }: { progress: number; file: File }) {
+    return (
+        <div className="text-center flex justify-center items-center flex-col">
+
+            <p>{progress}%</p>
+            <p className="mt-2 text-sm font-medium text-foreground">Uploading...</p>
+
+            <p className="mt-1 text-xs text-muted-foreground truncate max-w-xs">{file.name}</p>
         </div>
     )
 }
