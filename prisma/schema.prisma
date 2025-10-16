@@ -24,7 +24,7 @@ model User {
   updatedAt     DateTime  @default(now()) @updatedAt
   sessions      Session[]
   accounts      Account[]
-  courses       Coures[]
+  courses       Course[]
 
   @@unique([email])
   @@map("user")
@@ -75,7 +75,7 @@ model Verification {
   @@map("verification")
 }
 
-model Coures {
+model Course {
   id               String       @id @default(uuid())
   title            String
   description      String

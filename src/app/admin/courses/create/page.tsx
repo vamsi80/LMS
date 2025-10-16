@@ -2,20 +2,28 @@
 
 import Link from "next/link";
 import slugify from "slugify";
+import { toast } from "sonner";
+import { useTransition } from "react";
+import { createCourse } from "./actions";
+import { useRouter } from "next/navigation";
+import { tryCatch } from "@/hooks/try-catch";
 import { Input } from "@/components/ui/input";
+import { Resolver, useForm } from "react-hook-form";
 import { Textarea } from "@/components/ui/textarea";
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Resolver, useForm } from "react-hook-form"
-import { ArrowLeft, PlusIcon, SparkleIcon } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Uploader } from "@/components/file-uploader/uploader";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { RichTextEditor } from "@/components/rich-text-editor/editor";
+import { ArrowLeft, Loader2, PlusIcon, SparkleIcon } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { CourseCategories, CourseLevel, courseSchema, CourseSchemaType, CourseStatus } from "@/lib/zodSchemas";
-import { RichTextEditor } from "@/components/rich-text-editor/editor";
-import { Uploader } from "@/components/file-uploader/uploader";
 
 export default function CourseCreationPage() {
+
+    const [isPending, startTransition] = useTransition();
+    const router = useRouter();
 
     const form = useForm<CourseSchemaType>({
         resolver: zodResolver(courseSchema) as unknown as Resolver<CourseSchemaType>,
@@ -34,7 +42,28 @@ export default function CourseCreationPage() {
     })
 
     function onSubmit(values: CourseSchemaType) {
-        console.log(values)
+
+        console.log(values);
+        startTransition(async () => {
+            const { data: result, error } = await tryCatch(createCourse(values));
+            console.log("results",{result});
+
+            if (error) {
+                toast.error("An Error Occured. Please Try Again.");
+                console.error(error);
+                return;
+            }
+
+            if (result.status === "success") {
+                toast.success(result.message);
+                form.reset();
+                router.push("/admin/courses");
+            } else (
+                toast.error(result.message)
+            )
+        });
+
+
     }
 
     return (
@@ -124,7 +153,7 @@ export default function CourseCreationPage() {
                                     <FormItem>
                                         <FormLabel>Descreption</FormLabel>
                                         <FormControl>
-                                            <RichTextEditor field={field}/>
+                                            <RichTextEditor field={field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -137,7 +166,7 @@ export default function CourseCreationPage() {
                                     <FormItem>
                                         <FormLabel>Thumbnail image</FormLabel>
                                         <FormControl>
-                                            <Uploader onChange={field.onChange} value={field.value}/>
+                                            <Uploader onChange={field.onChange} value={field.value} />
                                             {/* <Input placeholder="thumbnail url" {...field} /> */}
                                         </FormControl>
                                         <FormMessage />
@@ -260,8 +289,20 @@ export default function CourseCreationPage() {
                                     </FormItem>
                                 )}
                             />
-                            <Button>
-                                Create Course <PlusIcon className="ml-1" size={16}/>
+                            <Button type="submit" disabled={isPending}>
+                                {
+                                    isPending ? (
+                                        <>
+                                            Creating...
+                                            <Loader2 className="ml-1 h-4 w-4 animate-spin" />
+                                        </>
+                                    ) : (
+                                        <>
+                                            Create Course
+                                            <PlusIcon className="ml-1" size={16} />
+                                        </>
+                                    )
+                                }
                             </Button>
                         </form>
                     </Form>
