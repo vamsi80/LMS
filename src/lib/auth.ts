@@ -1,4 +1,4 @@
-import 'server-only'
+
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "@/generated/prisma";
@@ -6,6 +6,7 @@ import { nextCookies } from "better-auth/next-js";
 import ForgotPasswordEmail from "@/components/auth/email-form";
 // import { sendEmail } from "./email";
 import { render } from "@react-email/render";
+import { admin } from "better-auth/plugins"
 
 import { Resend } from "resend";
 
@@ -58,5 +59,5 @@ export const auth = betterAuth({
 
     },
 
-    plugins: [nextCookies()],
+    plugins: [nextCookies(), admin()],
 });
