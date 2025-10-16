@@ -42,8 +42,7 @@ export default function CourseCreationPage() {
     })
 
     function onSubmit(values: CourseSchemaType) {
-
-        console.log(values);
+        
         startTransition(async () => {
             const { data: result, error } = await tryCatch(createCourse(values));
             console.log("results",{result});

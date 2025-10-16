@@ -35,8 +35,7 @@ export async function createCourse(values: CourseSchemaType): Promise<ApiRespons
             status: "success",
             message: "Course created successfully",
         };
-    } catch(error) {
-        console.error(error);
+    } catch {
         return {
             status: "error",
             message: "Error creating course",
