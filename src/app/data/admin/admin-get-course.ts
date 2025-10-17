@@ -13,6 +13,7 @@ export async function adminGetCourse(id: string) {
         select: {
             id: true,
             title: true,
+            description: true,
             smallDescription: true,
             duration: true,
             level: true,
@@ -20,6 +21,25 @@ export async function adminGetCourse(id: string) {
             price: true,
             fileKey: true,
             slug: true,
+            category: true,
+            chapters:{
+                select: {
+                    id: true,
+                    title: true,
+                    position: true,
+                    lessons: {
+                        select: {
+                            id: true,
+                            title: true,
+                            description: true,
+                            thumbnailKey: true,
+                            videoKey: true,
+                            position: true
+
+                        }
+                    }
+                }
+            }
         }
     });
 
@@ -29,3 +49,5 @@ export async function adminGetCourse(id: string) {
 
     return data
 }
+
+export type AdminCourseType = Awaited<ReturnType<typeof adminGetCourse>>

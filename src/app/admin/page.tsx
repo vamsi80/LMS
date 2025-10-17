@@ -3,6 +3,7 @@ import { DataTable } from "@/components/sidebar/data-table";
 import { SectionCards } from "@/components/sidebar/section-cards";
 
 import data from "./data.json"
+import { requireAdmin } from "../data/admin/require-admin";
 
 export default function AdminIndexPage() {
   return (
@@ -13,5 +14,4 @@ export default function AdminIndexPage() {
       </div><DataTable data={data} />
     </>
   )
-
 }
