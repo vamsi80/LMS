@@ -1,9 +1,9 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DndContext, DraggableSyntheticListeners, KeyboardSensor, PointerSensor, rectIntersection, useSensor, useSensors } from "@dnd-kit/core";
+import { DndContext, DragEndEvent, DraggableSyntheticListeners, KeyboardSensor, PointerSensor, rectIntersection, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { act, useState } from "react";
+import { act, useEffect, useState } from "react";
 import { CSS } from '@dnd-kit/utilities';
 import { AdminCourseType } from "@/app/data/admin/admin-get-course";
 import { cn } from "@/lib/utils";
@@ -12,7 +12,7 @@ import { ChevronDown, ChevronRight, FileText, GripVertical, Trash2 } from "lucid
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { toast } from "sonner";
-import { set } from "zod";
+import { reorderChapters, reorderLessons } from "../actions";
 
 interface iAppProps {
     data: AdminCourseType;
@@ -45,6 +45,23 @@ export function CourseStracture({ data }: iAppProps) {
 
     const [items, setItems] = useState(initialItems);
 
+    useEffect(() => {
+        setItems(prevItems => {
+            const updatedItems = data.chapters.map((chapter) => ({
+                id: chapter.id,
+                title: chapter.title,
+                order: chapter.position,
+                isOpen: prevItems.find(item => item.id === chapter.id)?.isOpen || true,
+                lessons: chapter.lessons.map((lesson) => ({
+                    id: lesson.id,
+                    title: lesson.title,
+                    order: lesson.position
+                }))
+            })) || [];
+            return updatedItems;
+        });
+    }, [data]);
+
     function SortableItem({ children, id, className, data }: SortableItemProps) {
         const {
             attributes,
@@ -69,7 +86,7 @@ export function CourseStracture({ data }: iAppProps) {
             </div>
         );
     }
-    function handleDragEnd(event: any) {
+    function handleDragEnd(event: DragEndEvent) {
         const { active, over } = event;
 
         if (!over || active.id === over.id) {
@@ -113,6 +130,29 @@ export function CourseStracture({ data }: iAppProps) {
             const previousItems = [...items];
 
             setItems(updatedChapterForState);
+
+            if (courseId) {
+                const chaptersToUpdate = updatedChapterForState.map((chapter) => ({
+                    id: chapter.id,
+                    position: chapter.order
+                }));
+
+                const reorderPromise = () => reorderChapters(chaptersToUpdate, courseId);
+                toast.promise(reorderPromise(), {
+                    loading: "Reordering chapters...",
+                    success: (result) => {
+                        if (result.status === "success") {
+                            return result.message;
+                        }
+                        throw new Error(result.message);
+                    },
+                    error: () => {
+                        setItems(previousItems);
+                        return "Failed to reorder chapters.";
+                    },
+                });
+            }
+            return;
         }
 
         if (activeType === "lesson" && overType === "lesson") {
@@ -160,12 +200,28 @@ export function CourseStracture({ data }: iAppProps) {
 
             setItems(newItems);
 
-            if(courseId){
+            if (courseId) {
                 const lessonToUpdate = updatedLessonForState.map((lesson) => ({
                     id: lesson.id,
-                    position: lesson.order 
-                }))
+                    position: lesson.order
+                }));
+                const reorderedLessonsPromise = () => reorderLessons(chapterId, lessonToUpdate, courseId);
+                toast.promise(reorderedLessonsPromise(), {
+                    loading: "Reordering lessons...",
+                    success: (result) => {
+                        if (result.status === "success") {
+                            return result.message;
+                            throw new Error(result.message);
+                        }
+                    },
+                    error: () => {
+                        setItems(previousItems);
+                        return "Failed to reorder lessons.";
+                    }
+                });
+
             }
+            return;
         }
     }
 

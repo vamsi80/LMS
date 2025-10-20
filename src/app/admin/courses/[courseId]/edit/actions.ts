@@ -8,6 +8,7 @@ import { ApiResponse } from "@/lib/types";
 import { courseSchema, CourseSchemaType } from "@/lib/zodSchemas";
 import { request } from "@arcjet/next";
 import { revalidatePath } from "next/cache";
+import { ca } from "zod/v4/locales";
 
 const aj = arcjet.withRule(
     detectBot({
@@ -85,6 +86,8 @@ export async function reorderLessons(
     courseId: string
 ): Promise<ApiResponse> {
 
+    await requireAdmin();
+
     try {
 
         if (!lessons || lessons.length === 0) {
@@ -122,4 +125,50 @@ export async function reorderLessons(
         }
     }
 
+}
+
+export async function reorderChapters(
+    chapters: { id: string, position: number }[],
+    courseId: string,
+): Promise<ApiResponse> {
+    
+    await requireAdmin();
+
+    try {
+
+        if (!chapters || chapters.length === 0) {
+            return {
+                status: "error",
+                message: "No chapters provided for reordering.",
+            };
+        }
+
+        const updates = chapters.map((chapter) =>
+            prisma.chapter.update({
+                where: {
+                    id: chapter.id,
+                    courseId: courseId,
+                },
+                data: {
+                    position: chapter.position,
+                },
+            })
+        );
+
+        await prisma.$transaction(updates);
+
+        revalidatePath(`/admin/courses/${courseId}/edit`);
+
+        return {
+            status: "success",
+            message: "Chapters reordered successfully"
+        };
+
+
+    } catch {
+        return {
+            status: "error",
+            message: "Failed to reorder chapters"
+        }
+    }
 }
