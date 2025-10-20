@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { toast } from "sonner";
 import { reorderChapters, reorderLessons } from "../actions";
+import { NewChapterModel } from "./newChapterModel";
 
 interface iAppProps {
     data: AdminCourseType;
@@ -255,8 +256,9 @@ export function CourseStracture({ data }: iAppProps) {
                 sensors={sensors}
             >
                 <Card>
-                    <CardHeader>
+                    <CardHeader className="flex items-center justify-between">
                         <CardTitle>Chapters</CardTitle>
+                        <NewChapterModel courseId={data.id} />
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <SortableContext
