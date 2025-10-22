@@ -39,11 +39,35 @@ export function RenderErrorState() {
     )
 }
 
-export function RenderUplodedState({ previewUrl, isDeleting, hadleRemoveFiles, }: { previewUrl: string; isDeleting: boolean; hadleRemoveFiles: () => void; }) {
-    return (
-        <div>
+export function RenderUplodedState({
+    previewUrl,
+    isDeleting,
+    hadleRemoveFiles,
+    fileType,
 
-            <Image src={previewUrl} alt="preview" fill className="w-full h-full object-cover p-2" />
+}: {
+    previewUrl: string;
+    isDeleting: boolean;
+    hadleRemoveFiles: () => void;
+    fileType: "image" | "video";
+}) {
+    return (
+        <div className="relative group w-full h-full flex items-center justify-center">
+
+            {fileType === "video" ? (
+                <video
+                    src={previewUrl}
+                    controls
+                    className="rounded-md w-full h-full"
+                />
+            ) : (
+                <Image
+                    src={previewUrl}
+                    alt="preview"
+                    fill
+                    className="object-contain p-2"
+                />
+            )}
 
             <Button
                 variant="destructive"

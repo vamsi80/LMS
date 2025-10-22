@@ -22,7 +22,7 @@ import { CourseCategories, CourseLevel, courseSchema, CourseSchemaType, CourseSt
 
 export default function CourseCreationPage() {
 
-    const [isPending, startTransition] = useTransition();
+    const [Pending, startTransition] = useTransition();
     const router = useRouter();
 
     const form = useForm<CourseSchemaType>({
@@ -165,7 +165,7 @@ export default function CourseCreationPage() {
                                     <FormItem>
                                         <FormLabel>Thumbnail image</FormLabel>
                                         <FormControl>
-                                            <Uploader onChange={field.onChange} value={field.value} />
+                                            <Uploader onChange={field.onChange} value={field.value} fileTypeAcepted="image" />
                                             {/* <Input placeholder="thumbnail url" {...field} /> */}
                                         </FormControl>
                                         <FormMessage />
@@ -288,9 +288,9 @@ export default function CourseCreationPage() {
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit" disabled={isPending}>
+                            <Button type="submit" disabled={Pending}>
                                 {
-                                    isPending ? (
+                                    Pending ? (
                                         <>
                                             Creating...
                                             <Loader2 className="ml-1 h-4 w-4 animate-spin" />

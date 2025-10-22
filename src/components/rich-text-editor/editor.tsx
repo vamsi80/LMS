@@ -31,7 +31,7 @@ export function RichTextEditor({field}: {field:any}) {
         // IMPORTANT: avoid immediate HTML render on the server — prevents hydration mismatch
         immediatelyRender: false,
         // optional safe defaults:
-        content: "<p>Hello World! 🌎️</p>",
+        content: field.value ? JSON.parse(field.value) : "Hellow World!",
     });
 
     if (!mounted) return null;
