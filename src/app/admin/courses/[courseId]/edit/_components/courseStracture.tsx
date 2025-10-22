@@ -8,12 +8,15 @@ import { CSS } from '@dnd-kit/utilities';
 import { AdminCourseType } from "@/app/data/admin/admin-get-course";
 import { cn } from "@/lib/utils";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronRight, FileText, GripVertical, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronRight, Delete, FileText, GripVertical, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { toast } from "sonner";
 import { reorderChapters, reorderLessons } from "../actions";
 import { NewChapterModel } from "./newChapterModel";
+import { NewLessonModel } from "./newLessonModel";
+import { DeleteLesson } from "./deleteLesson";
+import { DeleteChapter } from "./deleteChapter";
 
 interface iAppProps {
     data: AdminCourseType;
@@ -299,9 +302,7 @@ export function CourseStracture({ data }: iAppProps) {
                                                         </CollapsibleTrigger>
                                                         <p className="cursor-pointer hover:text-primary">{item.title}</p>
                                                     </div>
-                                                    <Button size="icon" variant="outline">
-                                                        <Trash2 className="size-4" />
-                                                    </Button>
+                                                    <DeleteChapter chapterId={item.id} courseId={data.id} />
                                                 </div>
                                                 <CollapsibleContent>
                                                     <div className="p-1">
@@ -328,21 +329,18 @@ export function CourseStracture({ data }: iAppProps) {
                                                                                 </Button>
                                                                                 <FileText className="size-4" />
                                                                                 <Link
-                                                                                    href={`/admin/courses/${data.id}/edit/chapters/${item.id}/lessons/${lesson.id}`}
-                                                                                    className="cursor-pointer hover:text-primary">{lesson.title}</Link>
+                                                                                    href={`/admin/courses/${data.id}/${item.id}/${lesson.id}`}
+                                                                                    className="cursor-pointer hover:text-primary">{lesson.title}
+                                                                                </Link>
                                                                             </div>
-                                                                            <Button size="icon" variant="outline">
-                                                                                <Trash2 className="size-4" />
-                                                                            </Button>
+                                                                            <DeleteLesson chapterId={item.id} courseId={data.id} lessonId={lesson.id} />
                                                                         </div>
                                                                     )}
                                                                 </SortableItem>
                                                             ))}
                                                         </SortableContext>
                                                         <div className="p-2">
-                                                            <Button className="w-full">
-                                                                Create New lesson
-                                                            </Button>
+                                                            <NewLessonModel courseId={data.id} chapterId={item.id} />
                                                         </div>
                                                     </div>
                                                 </CollapsibleContent>

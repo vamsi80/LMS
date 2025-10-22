@@ -1,32 +1,33 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { chapterSchema, ChapterSchemaType } from "@/lib/zodSchemas";
+import { lessonSchema, LessonSchemaType } from "@/lib/zodSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
 import { useState, useTransition } from "react";
 import { Resolver, useForm } from "react-hook-form";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
 import { tryCatch } from "@/hooks/try-catch";
-import { createChapter } from "../actions";
+import { createLesson } from "../actions";
 import { toast } from "sonner";
 
-export function NewChapterModel({ courseId }: { courseId: string }) {
+export function NewLessonModel({ courseId, chapterId }: { courseId: string, chapterId: string }) {
 
     const [isopen, setIsOpen] = useState(false);
     const [pending, startTransition] = useTransition();
 
-    const form = useForm<ChapterSchemaType>({
-        resolver: zodResolver(chapterSchema) as unknown as Resolver<ChapterSchemaType>,
+    const form = useForm<LessonSchemaType>({
+        resolver: zodResolver(lessonSchema) as unknown as Resolver<LessonSchemaType>,
         defaultValues: {
             name: '',
             courseId: courseId,
+            chapterId: chapterId,
         },
     })
 
-    async function onSubmit(values: ChapterSchemaType) {
+    async function onSubmit(values: LessonSchemaType) {
         startTransition(async () => {
-            const { data: result, error } = await tryCatch(createChapter(values));
+            const { data: result, error } = await tryCatch(createLesson(values));
             if (error) {
                 toast.error("An Error Occured. Please Try Again.");
                 console.error(error);
@@ -47,22 +48,23 @@ export function NewChapterModel({ courseId }: { courseId: string }) {
         if (!Open) {
             form.reset();
         }
+
         setIsOpen(Open);
     }
 
     return (
         <Dialog open={isopen} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
-                <Button variant="outline" size="sm" className="gap-2">
-                    <Plus className="size-4" /> New Chapter
+                <Button variant="outline" className="w-full justify-center gap-1">
+                    <Plus className="size-4" /> New Lesson
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    Create New Chapter
+                    Create New Lesson
                 </DialogHeader>
                 <DialogDescription>
-                    What would you like to name yout new chapter?
+                    What would you like to name yout new Lesson?
                 </DialogDescription>
                 <DialogHeader>
                     <Form {...form} >
@@ -77,7 +79,7 @@ export function NewChapterModel({ courseId }: { courseId: string }) {
                                         </FormLabel>
 
                                         <FormControl>
-                                            <Input placeholder="Chapter Name" {...field} />
+                                            <Input placeholder="Lesson Name" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
