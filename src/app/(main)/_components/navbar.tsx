@@ -42,7 +42,7 @@ export default function Navbar() {
 
   const { data: session, isPending } = authClient.useSession();
   return (
-    <header className="sticky border-b px-4 md:px-6">
+    <header className="sticky top-0 z-50 border-b px-4 md:px-6 bg-background/80">
       <div className="flex h-16 items-center justify-between gap-4">
         {/* Left side */}
         <div className="flex flex-1 items-center gap-2">
