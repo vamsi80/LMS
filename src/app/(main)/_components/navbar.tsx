@@ -33,7 +33,7 @@ import Image from "next/image"
 
 const navigationLinks = [
   { href: "dashboard", label: "Dashboard", icon: HomeIcon, active: true },
-  { href: "projects", label: "Projects", icon: LayersIcon },
+  { href: "courses", label: "Courses", icon: LayersIcon },
   { href: "documentation", label: "Documentation", icon: FileTextIcon },
   { href: "team", label: "Team", icon: UsersIcon },
 ]

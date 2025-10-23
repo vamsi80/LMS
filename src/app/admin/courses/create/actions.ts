@@ -7,17 +7,12 @@ import { PrismaClient } from "@/generated/prisma";
 import { ApiResponse } from "@/lib/types";
 import { courseSchema, CourseSchemaType } from "@/lib/zodSchemas";
 import { requireAdmin } from "@/app/data/admin/require-admin";
-import arcjet, { detectBot, fixedWindow } from "@/lib/arcjet";
+import arcjet, { fixedWindow } from "@/lib/arcjet";
 import { request } from "@arcjet/next";
 
 const prisma = new PrismaClient();
 
 const aj = arcjet.withRule(
-    detectBot({
-        mode: 'LIVE',
-        allow: [],
-    })
-).withRule(
     fixedWindow({
         mode: 'LIVE',
         window: "1m",
@@ -31,7 +26,7 @@ export async function createCourse(values: CourseSchemaType): Promise<ApiRespons
     try {
         const req = await request();
         const decision = await aj.protect(req, {
-            fingerprint: session?.user.id
+            fingerprint: session.user.id
         });
 
         if (decision.isDenied()) {

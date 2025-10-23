@@ -15,16 +15,19 @@ datasource db {
 }
 
 model User {
-  id            String    @id
+  id            String       @id
   name          String
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean      @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now()) @updatedAt
   sessions      Session[]
   accounts      Account[]
   courses       Course[]
+  enrollment    Enrollment[]
+
+  stripeCustomerId String?  @unique
 
   role       String?
   banned     Boolean?  @default(false)
@@ -99,6 +102,7 @@ model Course {
   user             User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId           String
   chapters         Chapter[]
+  enrollment       Enrollment[]
 }
 
 enum CourseLevel {
@@ -123,8 +127,9 @@ model Chapter {
   Course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
   courseId String
 
-  lessons  Lesson[]
+  lessons Lesson[]
 }
+
 model Lesson {
   id           String   @id @default(uuid())
   title        String
@@ -135,6 +140,24 @@ model Lesson {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  Chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  Chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   chapterId String
+}
+
+model Enrollment {
+  id        String           @id @default(uuid())
+  amount    Int
+  status    EnrollmentStatus @default(Pending)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  Course    Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId  String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+}
+
+enum EnrollmentStatus {
+  Pending
+  Active
+  Cancelled
 }
