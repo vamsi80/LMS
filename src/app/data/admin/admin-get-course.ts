@@ -3,12 +3,12 @@ import { requireAdmin } from "./require-admin";
 import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
 export async function adminGetCourse(id: string) {
-
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     await requireAdmin();
 
     const data = await prisma.course.findUnique({
-        where: { 
-            id: id 
+        where: {
+            id: id
         },
         select: {
             id: true,
@@ -22,7 +22,7 @@ export async function adminGetCourse(id: string) {
             fileKey: true,
             slug: true,
             category: true,
-            chapters:{
+            chapters: {
                 select: {
                     id: true,
                     title: true,

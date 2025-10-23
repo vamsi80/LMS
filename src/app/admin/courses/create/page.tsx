@@ -19,11 +19,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { CourseCategories, CourseLevel, courseSchema, CourseSchemaType, CourseStatus } from "@/lib/zodSchemas";
+import { useConfetti } from "@/hooks/use-confetti";
 
 export default function CourseCreationPage() {
 
     const [Pending, startTransition] = useTransition();
     const router = useRouter();
+    const { triggerConfetti } = useConfetti();
 
     const form = useForm<CourseSchemaType>({
         resolver: zodResolver(courseSchema) as unknown as Resolver<CourseSchemaType>,
@@ -42,10 +44,10 @@ export default function CourseCreationPage() {
     })
 
     function onSubmit(values: CourseSchemaType) {
-        
+
         startTransition(async () => {
             const { data: result, error } = await tryCatch(createCourse(values));
-            console.log("results",{result});
+            console.log("results", { result });
 
             if (error) {
                 toast.error("An Error Occured. Please Try Again.");
@@ -55,6 +57,7 @@ export default function CourseCreationPage() {
 
             if (result.status === "success") {
                 toast.success(result.message);
+                triggerConfetti();
                 form.reset();
                 router.push("/admin/courses");
             } else (
