@@ -1,15 +1,20 @@
 import "server-only";
+
 import prisma from "@/lib/db";
 import { requireAdmin } from "./require-admin";
 
-export async function adminGetCourses() {
+export async function getRecentCourses() {
     await requireAdmin();
 
-    const data = await prisma.course.findMany({
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
+    const data = await prisma.course.findMany({
         orderBy: {
             createdAt: 'desc'
         },
+
+        take: 2,
+
         select: {
             id: true,
             title: true,
@@ -20,11 +25,7 @@ export async function adminGetCourses() {
             price: true,
             fileKey: true,
             slug: true,
-        }
-    });
-
+        },
+    })
     return data;
 }
-
-export type AdminCoursesType = Awaited<ReturnType<typeof adminGetCourses>>[0];
-

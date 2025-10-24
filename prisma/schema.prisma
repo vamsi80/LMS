@@ -27,7 +27,7 @@ model User {
   courses       Course[]
   enrollment    Enrollment[]
 
-  stripeCustomerId String?  @unique
+  stripeCustomerId String? @unique
 
   role       String?
   banned     Boolean?  @default(false)
@@ -86,13 +86,16 @@ model Verification {
 }
 
 model Course {
-  id               String       @id @default(uuid())
-  title            String
-  description      String
-  fileKey          String
-  price            Int
-  duration         Int
-  level            CourseLevel  @default(Biginner)
+  id          String      @id @default(uuid())
+  title       String
+  description String
+  fileKey     String
+  price       Int
+  duration    Int
+  level       CourseLevel @default(Biginner)
+
+  stripePriceId String? @unique
+
   category         String
   smallDescription String
   slug             String       @unique

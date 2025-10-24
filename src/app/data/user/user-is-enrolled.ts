@@ -1,5 +1,6 @@
+import "server-only";
+
 import { auth } from "@/lib/auth";
-import { requireUser } from "./require-user";
 import { headers } from "next/headers";
 import prisma from "@/lib/db";
 
