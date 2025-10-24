@@ -11,8 +11,10 @@ const aj = arcjet({
       // Block all bots except the following
       allow: [
         "CATEGORY:SEARCH_ENGINE",
-		"CATEGORY:MONITOR",
-		"CATEGORY:PREVIEW", // Google, Bing, etc
+        "CATEGORY:MONITOR",
+        "CATEGORY:PREVIEW",
+        "STRIPE_WEBHOOK"
+        // Google, Bing, etc
         // Uncomment to allow these other common bot categories
         // See the full list at https://arcjet.com/bot-list
         //"CATEGORY:MONITOR", // Uptime monitoring services
@@ -23,16 +25,16 @@ const aj = arcjet({
 });
 
 async function authMiddileware(request: NextRequest) {
-	const sessionCookie = getSessionCookie(request);
+  const sessionCookie = getSessionCookie(request);
 
-    // THIS IS NOT SECURE!
-    // This is the recommended approach to optimistically redirect users
-    // We recommend handling auth checks in each page/route
-	if (!sessionCookie) {
-		return NextResponse.redirect(new URL("/sign-in", request.url));
-	}
+  // THIS IS NOT SECURE!
+  // This is the recommended approach to optimistically redirect users
+  // We recommend handling auth checks in each page/route
+  if (!sessionCookie) {
+    return NextResponse.redirect(new URL("/sign-in", request.url));
+  }
 
-	return NextResponse.next();
+  return NextResponse.next();
 }
 
 export const config = {
@@ -42,9 +44,9 @@ export const config = {
 };
 // Pass any existing middleware with the optional existingMiddleware prop
 export default createMiddleware(aj, async (request: NextRequest) => {
-	if(request.nextUrl.pathname.startsWith("/admin")) {
-		return authMiddileware(request);
-	}
+  if (request.nextUrl.pathname.startsWith("/admin")) {
+    return authMiddileware(request);
+  }
 
-	return NextResponse.next();
+  return NextResponse.next();
 });

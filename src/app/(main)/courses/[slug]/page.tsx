@@ -1,7 +1,7 @@
 import { getIndividualCourse } from "@/app/data/course/get-course";
+import { checkIfCourseBought } from "@/app/data/user/user-is-enrolled";
 import { RenderDescription } from "@/components/rich-text-editor/renderDescreption";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
@@ -9,6 +9,9 @@ import { env } from "@/lib/env";
 import { IconBook, IconCategory, IconChartBar, IconChevronDown, IconClock, IconPlayerPlay } from "@tabler/icons-react";
 import { CheckIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { EnrollmentButton } from "./_components/enrollmentButton";
+import { buttonVariants } from "@/components/ui/button";
 
 type Params = Promise<{
     slug: string,
@@ -16,7 +19,8 @@ type Params = Promise<{
 export default async function SlugPage({ params }: { params: Params }) {
     const { slug } = await params;
 
-    const course = await getIndividualCourse(slug);    
+    const course = await getIndividualCourse(slug);
+    const isEnroled = await checkIfCourseBought(course.id);
 
     return (
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 mt-5">
@@ -127,26 +131,19 @@ export default async function SlugPage({ params }: { params: Params }) {
                                                             <p className="text-sm text-muted-foreground mt-1">
                                                                 Lesson {lessonIndex + 1}
                                                             </p>
-
                                                         </div>
-
                                                     </div>
                                                 ))}
                                             </div>
-
                                         </div>
                                     </CollapsibleContent>
                                 </Card>
-
                             </Collapsible>
                         ))}
-
                     </div>
                 </div>
             </div>
 
-
-            {/* enrollment card */}
             <div className="order-2 lg:col-span-1">
                 <div className="sticky top-20">
                     <Card className="py-0">
@@ -248,7 +245,11 @@ export default async function SlugPage({ params }: { params: Params }) {
                                     </li>
                                 </ul>
                             </div>
-                            <Button className="w-full">Enroll Now!</Button>
+                            {isEnroled ? (
+                                <Link href="/dashboard" className={buttonVariants({ className: "w-full" })}>Watch Course</Link>
+                            ) : (
+                                <EnrollmentButton courseId={course.id} />
+                            )}
                             <p className="mt-3 text-center text-xs text-muted-foreground">30-day money back guarantee</p>
                         </CardContent>
                     </Card>
