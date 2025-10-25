@@ -36,6 +36,7 @@ model User {
 
   @@unique([email])
   @@map("user")
+  lessonProgress LessonProgress[]
 }
 
 model Session {
@@ -145,6 +146,26 @@ model Lesson {
 
   Chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   chapterId String
+
+  lessonProgress LessonProgress[]
+}
+
+model LessonProgress {
+  id        String   @id @default(uuid())
+
+  completed Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  Lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  lessonId  String
+
+  @@unique([userId, lessonId])
+
 }
 
 model Enrollment {

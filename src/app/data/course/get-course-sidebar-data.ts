@@ -1,7 +1,6 @@
 import prisma from "@/lib/db";
 import "server-only";
 import { requireUser } from "../user/require-user";
-import { sl } from "zod/v4/locales";
 import { notFound } from "next/navigation";
 
 export async function getCourseSidebarData(slug: string) {
@@ -37,6 +36,16 @@ export async function getCourseSidebarData(slug: string) {
                             title: true,
                             position: true,
                             description: true,
+                            lessonProgress: {
+                                where: {
+                                    userId: user.id,
+                                },
+                                select: {
+                                    completed: true,
+                                    lessonId: true,
+                                    id: true,
+                                },
+                            }
                         },
                     },
                 },
@@ -65,7 +74,9 @@ export async function getCourseSidebarData(slug: string) {
         return notFound();
     }
 
-    return course;
+    return{
+        course
+    }
 }
 
 export type CourseSidebarDataType = Awaited<ReturnType<typeof getCourseSidebarData>>

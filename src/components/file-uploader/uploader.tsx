@@ -7,7 +7,7 @@ import { CardContent } from "../ui/card";
 import { RenderEmptyState, RenderErrorState, RenderUplodedState, RenderUplodingState } from "./renderState";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from 'uuid';
-import { useConstractUrl } from "@/hooks/use-constract-url";
+import { useConstructUrl } from "@/hooks/use-constract-url";
 import { file } from "zod";
 
 interface UploaderState {
@@ -29,7 +29,7 @@ interface iAppProps {
 }
 
 export function Uploader({ value, onChange, fileTypeAcepted }: iAppProps) {
-    const fileUrl = useConstractUrl(value || "");
+    const fileUrl = useConstructUrl(value || "");
 
     const [fileState, setFileState] = useState<UploaderState>({
         error: false,

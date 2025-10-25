@@ -3,7 +3,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useConstractUrl } from "@/hooks/use-constract-url";
+import { useConstructUrl } from "@/hooks/use-constract-url";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { ArrowRight, Eye, MoreVertical, Pencil, School, TimerIcon, Trash2 } from "lucide-react";
 import Image from "next/image";
@@ -15,7 +15,7 @@ interface iAppProps {
 }
 export function AdminCourseCard({ data }: iAppProps) {
 
-    const thumbnailUrl = useConstractUrl(data.fileKey);
+    const thumbnailUrl = useConstructUrl(data.fileKey);
     return (
         <Card className="group relative py-0 gap-0">
             <div className="absolute top-2 right-2 z-10">
