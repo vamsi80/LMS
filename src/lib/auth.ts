@@ -1,63 +1,32 @@
-
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { PrismaClient } from "@/generated/prisma";
-import { nextCookies } from "better-auth/next-js";
-import ForgotPasswordEmail from "@/components/auth/email-form";
-// import { sendEmail } from "./email";
-import { render } from "@react-email/render";
-import { admin } from "better-auth/plugins"
+import { env } from "./env";
+import { emailOTP } from "better-auth/plugins"
+import { admin } from "better-auth/plugins";
+import prisma from "./db";
+import { resend } from "./resend";
 
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY!);
-
-const prisma = new PrismaClient();
 export const auth = betterAuth({
-    database: prismaAdapter(prisma, {
-        provider: "postgresql", // or "mysql", "postgresql", ...etc
-    }),
-    emailAndPassword: {
-        enabled: true,
-        // sendResetPassword: async ({ user, url}) => {
-        //     console.log("Sending password reset email to:", user.email, "with URL:", url);
-        //     const htmlContent = await render(
-        //         ForgotPasswordEmail({
-        //             userEmail: user.email,
-        //             userName: user.name,
-        //             resetUrl: url,
-        //         })
-        //     );
-
-        //     await sendEmail({
-        //         to: user.email,
-        //         subject: "Reset your password",
-        //         html: htmlContent,
-        //     });
-        // },
-
-        sendResetPassword: async ({ user, url }) => {
-            console.log("Sending password reset email to:", user.email, "with URL:", url);
-
-            // render returns Promise<string> — await it so htmlContent is a string
-            const htmlContent = await render(
-                ForgotPasswordEmail({
-                    userEmail: user.email,
-                    userName: user.name ?? "",
-                    resetUrl: url,
-                })
-            );
-
-            // send email via Resend (htmlContent is now string)
-            await resend.emails.send({
-                from: "LMS <onboarding@resend.dev>",
-                to: user.email,
-                subject: "Reset your password",
-                html: htmlContent,
-            });
-        },
-
+  database: prismaAdapter(prisma, {
+    provider: "postgresql", 
+  }),
+  socialProviders: {
+    github: {
+      clientId: env.AUTH_GITHUB_CLIENT_ID,
+      clientSecret: env.AUTH_GITHUB_SECRET,
     },
-
-    plugins: [nextCookies(), admin()],
-});
+  },
+  plugins: [
+    emailOTP({
+      async sendVerificationOTP({email, otp}){
+        const { data, error } = await resend.emails.send({
+          from: 'LMS <onboarding@resend.dev>',
+          to: [email],
+          subject: 'Tusker LMS - Verify your email',
+          html: `<p>YourOTP is <strong>${otp}</strong></p>`,
+        });
+      }
+    }),
+    admin() // Da toda la lógica de backend para un panel de administración, permitiéndote a ti centrarte únicamente en construir la interfaz de usuario (UI) que consuma estos servicios.
+  ]
+})

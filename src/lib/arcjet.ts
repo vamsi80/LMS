@@ -20,7 +20,6 @@ export {
 
 const ARCJET_KEY = env.ARCJET_KEY;
 
-console.log("Arcjet Key:", ARCJET_KEY);
 if (!ARCJET_KEY) {
   throw new Error(
     "Missing environment variable ARCJET_KEY. Set ARCJET_KEY in your .env or host environment."

@@ -1,16 +1,22 @@
-"use client";
+import { auth } from '@/lib/auth';
+// import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { LoginForm } from './_components/loginForm';
+import { headers } from 'next/headers';
 
-import { LoginForm } from "@/components/auth/sign-in-form";
-import { useRouter } from "next/navigation";
+const signInPage = async() => {
 
-export default function signInPage() {
-  const router = useRouter();
- 
+  const session = await auth.api.getSession({
+    headers: await headers()
+  });
+
+  if(session){
+    return redirect("/");
+  }
+
   return (
-    <div className="bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm md:max-w-3xl">
-        <LoginForm />
-      </div>
-    </div>
-  );
+    <LoginForm />
+  )
 }
+
+export default signInPage
