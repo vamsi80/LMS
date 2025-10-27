@@ -1,52 +1,51 @@
-import { env } from "@/lib/env";
+
 import arcjet, { createMiddleware, detectBot } from "@arcjet/next";
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
+import { env } from "@/lib/env";
 
+// Middleware de autenticación específico para rutas protegidas.
+export async function authMiddleware(request: NextRequest) {
+  const sessionCookie = getSessionCookie(request);                 // El código busca una cookie de sesión. Esta cookie es la prueba de que el usuario ha iniciado sesión previamente.
+
+   if (!sessionCookie) {
+     return NextResponse.redirect(new URL("/", request.url));       // Si no se encuentra una cookie de sesión, redirige al usuario a la página de inicio.
+   }
+
+  return NextResponse.next();                                      // Si SÍ hay cookie: El middleware considera que el usuario probablemente está autenticado y le permite continuar
+}
+
+// Configuración del matcher para que el middleware se aplique a todas las rutas,
+// excepto a los archivos estáticos y de imagen. Esto permite una protección global.
+export const config = {
+  matcher: ["/((?!_next/static|_next/image/favicon.ico|api/auth).*)"]
+};
+
+// Configuración de Arcjet para la protección contra bots en todas las rutas.
 const aj = arcjet({
-  key: env.ARCJET_KEY!, // Get your site key from https://app.arcjet.com
+  key: env.ARCJET_KEY!,
   rules: [
     detectBot({
-      mode: "LIVE", // will block requests. Use "DRY_RUN" to log only
-      // Block all bots except the following
-      allow: [
+      mode: "LIVE",                      // Regla para detectar y bloquear bots maliciosos.
+      allow: [                           // Permite el paso a bots conocidos y beneficiosos (buscadores, monitores, etc.).
         "CATEGORY:SEARCH_ENGINE",
         "CATEGORY:MONITOR",
         "CATEGORY:PREVIEW",
         "STRIPE_WEBHOOK"
-        // Google, Bing, etc
-        // Uncomment to allow these other common bot categories
-        // See the full list at https://arcjet.com/bot-list
-        //"CATEGORY:MONITOR", // Uptime monitoring services
-        //"CATEGORY:PREVIEW", // Link previews e.g. Slack, Discord
-      ],
-    }),
-  ],
-});
+      ]
+    })
+  ]
+})
 
-async function authMiddileware(request: NextRequest) {
-  const sessionCookie = getSessionCookie(request);
-
-  // THIS IS NOT SECURE!
-  // This is the recommended approach to optimistically redirect users
-  // We recommend handling auth checks in each page/route
-  if (!sessionCookie) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
+// Nextjs busca config cuando existe un archivo middleware y ejecuta 
+// la función exportada como default en las rutas que coincidan con el matcher.
+// createMiddleware ejecuta primero arcjet y luego authMiddleware.
+//
+export default createMiddleware(aj, async (request: NextRequest) => {                        // Después de la protección de Arcjet, se aplica la lógica de autenticación condicional.
+  if (request.nextUrl.pathname.startsWith("/admin")) {                                       // Si la ruta es de administrador, se invoca el middleware de autenticación.
+    return authMiddleware(request)
   }
 
-  return NextResponse.next();
-}
+  return NextResponse.next()                                                                 // Para cualquier otra ruta, se permite el paso (ya ha sido procesada por Arcjet).
 
-export const config = {
-  // matcher tells Next.js which routes to run the middleware on.
-  // This runs the middleware on all routes except for static assets.
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|api/auth).*)"],
-};
-// Pass any existing middleware with the optional existingMiddleware prop
-export default createMiddleware(aj, async (request: NextRequest) => {
-  if (request.nextUrl.pathname.startsWith("/admin")) {
-    return authMiddileware(request);
-  }
-
-  return NextResponse.next();
 });
