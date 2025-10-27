@@ -161,7 +161,7 @@ export default async function SlugPage({ params }: { params: Params }) {
                             </div>
                             <div className="mb-6 space-y-3 rounded-lg bg-muted p-4">
                                 <h4 className="font-medium">
-                                    What you'll get:
+                                    What you&rsquo;ll get:
                                 </h4>
                                 <div className="flex flex-col gap-4">
                                     <div className="flex items-center gap-3">

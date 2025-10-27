@@ -12,7 +12,7 @@ export default function NotAdmin() {
                         <ShieldX className="size-16 text-destructive"/>
                     </div>
                     <CardTitle className="text-2xl">Acesses Denied</CardTitle>
-                    <CardDescription className="max-w-xs mx-auto">hey user you are not an admin you can't create any courses or stuff like that</CardDescription>
+                    <CardDescription className="max-w-xs mx-auto">hey user you are not an admin you can&apos;t create any courses or stuff like that</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Link className={buttonVariants({
