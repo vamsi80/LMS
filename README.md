@@ -19,8 +19,6 @@
 
 ---
 
-> **Replace the placeholders before you share this.** The demo link, the screenshots and the GIF below are the three things a reviewer looks at first. A README that promises a demo and doesn't have one reads worse than no README at all.
-
 <div align="center">
   <img src="docs/demo.gif" alt="Course creation, checkout and lesson playback" width="800" />
 </div>
@@ -45,7 +43,7 @@
 
 ## What this is
 
-Skillsome is a multi-tenant course platform built on the Next.js App Router. It covers the full commercial loop rather than just CRUD:
+LMS is a multi-tenant course platform built on the Next.js App Router. It covers the full commercial loop rather than just CRUD:
 
 1. An **admin** authors a course — chapters and lessons, drag-and-drop reordering, rich-text descriptions, video and thumbnail uploads.
 2. A **learner** browses the catalogue, pays through Stripe Checkout, and is enrolled by a signed webhook rather than by a client-side redirect.
