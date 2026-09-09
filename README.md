@@ -1,6 +1,6 @@
 <div align="center">
 
-# Skillsome — Full-Stack Learning Management System
+# Full-Stack Learning Management System
 
 **A production-shaped LMS: instructors publish paid video courses, learners buy them through Stripe, and progress is tracked lesson-by-lesson.**
 
