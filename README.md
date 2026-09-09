@@ -17,14 +17,6 @@
 
 </div>
 
----
-
-<div align="center">
-  <img src="docs/demo.gif" alt="Course creation, checkout and lesson playback" width="800" />
-</div>
-
----
-
 ## Table of Contents
 
 - [What this is](#what-this-is)
