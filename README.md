@@ -13,7 +13,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-[Live Demo](https://YOUR-DEPLOYMENT-URL.vercel.app) · [Report a Bug](https://github.com/vamsi80/LMS/issues) · [Architecture](#architecture)
+[Report a Bug](https://github.com/vamsi80/LMS/issues) · [Architecture](#architecture)
 
 </div>
 
